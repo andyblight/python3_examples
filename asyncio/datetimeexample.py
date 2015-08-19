@@ -1,6 +1,11 @@
-"""Example taken from
+#! /usr/bin/python3
+"""asyncio example.
+
+Original code from
 https://docs.python.org/3/library/asyncio-task.html#example-coroutine-displaying-the-current-date.
-Sorted out PyLint warnings."""
+Removed PyLint warnings.
+"""
+
 import asyncio
 import datetime
 
