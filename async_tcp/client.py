@@ -33,31 +33,31 @@ except ImportError:
 
 
 class EchoClient(asyncio.Protocol):
-    """."""
+    """Sends a message to the server and prints out what is sent back."""
+
     MESSAGE = "This is the MESSAGE. It will be echoed."
 
     def __init__(self):
         self.transport = None
 
     def connection_made(self, transport):
-        """."""
+        """Sends the message when the connection is made."""
         self.transport = transport
         self.transport.write(self.MESSAGE.encode())
         print("Client: data sent: '{0}'".format(self.MESSAGE))
 
     def data_received(self, data):
-        """."""
+        """Print out data and close after 10 seconds."""
         print("Client: data received: '{0}".format(data))
-
         # disconnect after 10 seconds
         asyncio.get_event_loop().call_later(10.0, self.transport.close)
 
     def eof_received(self):
-        """."""
+        """Ignore EOF."""
         pass
 
     def connection_lost(self, exc):
-        """."""
+        """Stop client when the connection is lost."""
         print("Client: connection lost:", exc)
         asyncio.get_event_loop().stop()
 

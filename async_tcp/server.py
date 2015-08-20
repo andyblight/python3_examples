@@ -3,7 +3,7 @@
 Based on code from:
 https://github.com/python/asyncio/blob/master/examples/tcp_echo.py
 
-See client.py to find out how to run the two.
+See client.py to find out how to run the two examples.
 """
 
 import argparse
@@ -41,7 +41,7 @@ class EchoServer(asyncio.Protocol):
             self.TIMEOUT, self.timeout)
 
     def data_received(self, data):
-        """."""
+        """Print out the received data and echo it back."""
         print("Server: data received: '{0}'".format(data.decode()))
         self.transport.write(b"Re: " + data)
 
@@ -51,11 +51,11 @@ class EchoServer(asyncio.Protocol):
             self.TIMEOUT, self.timeout)
 
     def eof_received(self):
-        """."""
+        """Ignore EOF."""
         pass
 
     def connection_lost(self, exc):
-        """."""
+        """Cancel the time out when the connection has been lost."""
         print("Server: connection lost:", exc)
         self.h_timeout.cancel()
 
