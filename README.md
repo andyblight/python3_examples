@@ -6,6 +6,8 @@ Developed using Eclipse Mars (4.5) with latest PyDev (4.2.0) installed.
 PyLint is run over the code with all checks enabled and terse output. 
 See .pylintrc for details. 
 
+Run the demonstration code using the "run.sh" scripts in each directory. 
+
 Versions used as reported by "pylint --version":
 ```
  pylint 1.4.4, 

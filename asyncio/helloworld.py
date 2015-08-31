@@ -13,7 +13,12 @@ def hello_world():
     """Print Hello World."""
     print("Hello World!")
 
-LOOP = asyncio.get_event_loop()
-# Blocking call which returns when the hello_world() coroutine is done
-LOOP.run_until_complete(hello_world())
-LOOP.close()
+def main():
+    """Run the application."""
+    loop = asyncio.get_event_loop()
+    # Blocking call which returns when the hello_world() coroutine is done
+    loop.run_until_complete(hello_world())
+    loop.close()
+
+if __name__ == "__main__":
+    main()

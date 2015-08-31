@@ -62,34 +62,37 @@ class EchoClient(asyncio.Protocol):
         asyncio.get_event_loop().stop()
 
 
-ARGS = argparse.ArgumentParser(description="TCP Echo example.")
-ARGS.add_argument(
-    "--host", action="store", dest="host",
-    default="127.0.0.1", help="Host name")
-ARGS.add_argument(
-    "--port", action="store", dest="port",
-    default=9999, type=int, help="Port number")
+def main():
+    """Setup and run the application."""
+    # Parse the arguments passed to the application
+    args = argparse.ArgumentParser(description="TCP Echo example client.")
+    args.add_argument(
+        "--host", action="store", dest="host",
+        default="127.0.0.1", help="Host name")
+    args.add_argument(
+        "--port", action="store", dest="port",
+        default=9999, type=int, help="Port number")
+    arguments = args.parse_args()
+    if ":" in arguments.host:
+        arguments.host, PORT = arguments.host.split(":", 1)
+        arguments.port = int(PORT)
 
-
-if __name__ == "__main__":
-    ARGUMENTS = ARGS.parse_args()
-
-    if ":" in ARGUMENTS.host:
-        ARGUMENTS.host, PORT = ARGUMENTS.host.split(":", 1)
-        ARGUMENTS.port = int(PORT)
-
-    LOOP = asyncio.get_event_loop()
+    # Start the main loop
+    loop = asyncio.get_event_loop()
     if signal is not None and sys.platform != "win32":
-        LOOP.add_signal_handler(signal.SIGINT, LOOP.stop)
+        loop.add_signal_handler(signal.SIGINT, loop.stop)
 
     print("Client: starting")
-    TASK = asyncio.Task(LOOP.create_connection(EchoClient,
-                                               ARGUMENTS.host, ARGUMENTS.port))
-    LOOP.run_until_complete(TASK)
+    task = asyncio.Task(loop.create_connection(EchoClient,
+                                               arguments.host, arguments.port))
+    loop.run_until_complete(task)
 
     try:
         print("Client: running")
-        LOOP.run_forever()
+        loop.run_forever()
     finally:
-        LOOP.close()
+        loop.close()
         print("Client: stopped")
+
+if __name__ == "__main__":
+    main()

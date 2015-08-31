@@ -59,37 +59,38 @@ class EchoServer(asyncio.Protocol):
         print("Server: connection lost:", exc)
         self.h_timeout.cancel()
 
+def main():
+    """Setup and run the application."""
+    # Parse the arguments passed to the application
+    args = argparse.ArgumentParser(description="TCP Echo example.")
+    args.add_argument(
+        "--host", action="store", dest="host",
+        default="127.0.0.1", help="Host name")
+    args.add_argument(
+        "--port", action="store", dest="port",
+        default=9999, type=int, help="Port number")
+    arguments = args.parse_args()
+    if ":" in arguments.host:
+        arguments.host, port = arguments.host.split(":", 1)
+        arguments.port = int(port)
 
-ARGS = argparse.ArgumentParser(description="TCP Echo example.")
-ARGS.add_argument(
-    "--host", action="store", dest="host",
-    default="127.0.0.1", help="Host name")
-ARGS.add_argument(
-    "--port", action="store", dest="port",
-    default=9999, type=int, help="Port number")
-
-
-if __name__ == "__main__":
-    ARGUMENTS = ARGS.parse_args()
-
-    if ":" in ARGUMENTS.host:
-        ARGUMENTS.host, PORT = ARGUMENTS.host.split(":", 1)
-        ARGUMENTS.port = int(PORT)
-
-    LOOP = asyncio.get_event_loop()
-    print("Server: using backend: {0}".format(LOOP.__class__.__name__))
-
+    # Run the application.
+    loop = asyncio.get_event_loop()
+    print("Server: using backend: {0}".format(loop.__class__.__name__))
     if signal is not None and sys.platform != "win32":
-        LOOP.add_signal_handler(signal.SIGINT, LOOP.stop)
+        loop.add_signal_handler(signal.SIGINT, loop.stop)
 
     print("Server: starting")
-    SERVER = LOOP.create_server(EchoServer, ARGUMENTS.host, ARGUMENTS.port)
-    LOOP.run_until_complete(SERVER)
+    server = loop.create_server(EchoServer, arguments.host, arguments.port)
+    loop.run_until_complete(server)
 
     try:
         print("Server: running")
-        LOOP.run_forever()
+        loop.run_forever()
     finally:
-        SERVER.close()
-        LOOP.close()
+        server.close()
+        loop.close()
         print("Server: stopped")
+
+if __name__ == "__main__":
+    main()

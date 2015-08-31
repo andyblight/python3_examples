@@ -19,7 +19,12 @@ def display_date(loop):
             break
         yield from asyncio.sleep(1)
 
-LOOP = asyncio.get_event_loop()
-# Blocking call which returns when the display_date() coroutine is done
-LOOP.run_until_complete(display_date(LOOP))
-LOOP.close()
+def main():
+    """Run the application."""
+    loop = asyncio.get_event_loop()
+    # Blocking call which returns when the display_date() coroutine is done
+    loop.run_until_complete(display_date(loop))
+    loop.close()
+
+if __name__ == "__main__":
+    main()
